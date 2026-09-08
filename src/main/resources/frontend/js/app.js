@@ -192,6 +192,10 @@ async function loadStudentGroup() {
 
 
             const preferencesList = document.getElementById('group-preferences-display');
+            if (rankedSubjects.length === 0) {
+                preferencesList.innerHTML = '<div class="hint" style="align-items: center">Aucun sujets trouvés.</div>';
+                return;
+            }
             preferencesList.innerHTML = '';
             preferencesList.innerHTML += '<h3>Préférences des sujets: 1->5</h3>'
             rankedSubjects.forEach(s => {

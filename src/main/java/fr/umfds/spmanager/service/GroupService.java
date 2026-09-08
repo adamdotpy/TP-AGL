@@ -161,7 +161,7 @@ public class GroupService {
         /* Returns group details such as group info, members, preferences */
         Optional<StudentGroup> group = groupRepository.findById(groupId); // id; name WE KNOW WHAT GROUP IT IS
         if (group.isEmpty()) {
-            throw new NotFoundException("Group Not Found");
+            throw new NotFoundException("[GroupService:GroupDetailsResponse] Group Not Found");
         }
 
         int grp_id = group.get().getId();
