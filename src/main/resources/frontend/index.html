@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Projets Étudiants - AGL</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Barre de navigation supérieure -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1><span class="badge">AGL</span> Gestion de Projets Étudiants</h1>
+            <div id="user-nav" class="hidden">
+                <span id="user-info"></span>
+                <button id="logout-btn" class="btn-outline">Déconnexion</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ======================================================== -->
+        <!-- 1. AUTHENTIFICATION (US1)                                -->
+        <!-- ======================================================== -->
+        <section id="auth-section" class="card card-center">
+            <h2>Connexion</h2>
+            <p class="text-muted">Accédez à votre espace avec vos identifiants.</p>
+            <form id="login-form">
+                <label for="login-input">Identifiant :</label>
+                <input type="text" id="login-input" required placeholder="ex: admin, turing, jdupont">
+
+                <label for="password-input">Mot de passe :</label>
+                <input type="password" id="password-input" required placeholder="••••••••">
+
+                <button type="submit">Se connecter</button>
+            </form>
+
+            <div class="quick-logins">
+                <small>Comptes de test préchargés :</small>
+                <div class="chips">
+                    <button type="button" class="chip" onclick="fillLogin('admin', 'admin')">Admin (admin/admin)</button>
+                    <button type="button" class="chip" onclick="fillLogin('turing', 'alan')">Enseignant (turing/alan)</button>
+                    <button type="button" class="chip" onclick="fillLogin('jdupont', 'jean')">Étudiant (jdupont/jean)</button>
+                    <button type="button" class="chip" onclick="fillLogin('cgomez', 'carlos')">Étudiant (cgomez/carlos)</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- 2. TABLEAU DE BORD PRINCIPAL                            -->
+        <!-- ======================================================== -->
+        <section id="dashboard-section" class="hidden">
+            <!-- Onglets de navigation adaptés au rôle -->
+            <nav id="role-tabs" class="tabs-nav"></nav>
+
+            <!-- ---------------------------------------------------- -->
+            <!-- VUE COMMUNE : Consultation des Sujets (US6)          -->
+            <!-- ---------------------------------------------------- -->
+            <div id="view-subjects" class="tab-pane hidden">
+                <div class="pane-header">
+                    <h2>Sujets Proposés</h2>
+                    <span id="subjects-count-badge" class="badge">0 sujet</span>
+                </div>
+                <div id="subjects-list" class="grid"></div>
+            </div>
+
+            <!-- ---------------------------------------------------- -->
+            <!-- VUES ENSEIGNANT                                      -->
+            <!-- ---------------------------------------------------- -->
+            <!-- Proposer un Sujet (US7) -->
+            <div id="view-create-subject" class="tab-pane hidden">
+                <h2>Proposer un Nouveau Sujet</h2>
+                <form id="create-subject-form" class="card">
+                    <label for="subject-title">Titre du sujet :</label>
+                    <input type="text" id="subject-title" required placeholder="Ex: Algorithme d'optimisation...">
+
+                    <label for="subject-description">Description :</label>
+                    <textarea id="subject-description" rows="4" required placeholder="Description détaillée du projet..."></textarea>
+
+                    <button type="submit">Publier le sujet</button>
+                </form>
+            </div>
+
+            <!-- Mes Sujets & Modification (US8) -->
+            <div id="view-my-subjects" class="tab-pane hidden">
+                <h2>Mes Sujets Proposés</h2>
+                <div id="my-subjects-list" class="grid"></div>
+            </div>
+
+            <!-- ---------------------------------------------------- -->
+            <!-- VUES ÉTUDIANT                                        -->
+            <!-- ---------------------------------------------------- -->
+            <!-- Mon Groupe (US10 & US11) -->
+            <div id="view-group" class="tab-pane hidden">
+                <!-- Cas 1 : L'étudiant n'a pas encore de groupe -->
+                <div id="no-group-container" class="grid-2">
+                    <!-- Créer un groupe (US10) -->
+                    <div class="card">
+                        <h3>Créer un groupe</h3>
+                        <p class="text-muted">Vous serez le 1er membre de l'équipe (1 à 4 étudiants).</p>
+                        <form id="create-group-form">
+                            <label for="group-name-input">Nom du groupe :</label>
+                            <input type="text" id="group-name-input" required placeholder="Ex: Les Algoristes">
+                            <button type="submit">Créer le groupe</button>
+                        </form>
+                    </div>
+
+                    <!-- Rejoindre un groupe (US11) -->
+                    <div class="card">
+                        <h3>Rejoindre un groupe</h3>
+                        <p class="text-muted">Rejoignez un groupe existant ayant moins de 4 membres.</p>
+                        <div id="available-groups-list"></div>
+                    </div>
+                </div>
+
+                <!-- Cas 2 : L'étudiant a déjà un groupe -->
+                <div id="has-group-container" class="card hidden">
+                    <div class="pane-header">
+                        <div>
+                            <span class="badge">Mon Équipe</span>
+                            <h2 id="my-group-name"></h2>
+                        </div>
+                        <span id="group-members-count" class="badge"></span>
+                    </div>
+
+                    <h3>Membres de l'équipe</h3>
+                    <ul id="my-group-members-list" class="simple-list"></ul>
+                    <div id="group-preferences-display" class="group-section">
+                        <!-- Les préférences ordonnées du groupe apparaîtront ici -->
+                    </div>
+                    <div id="group-actions" class="group-section">
+                        <!-- Exemple : <button id="leave-group-btn" class="btn-danger">Quitter le groupe</button> -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saisie des Préférences (US14) -->
+            <div id="view-preferences" class="tab-pane hidden">
+                <h2>Saisir les Préférences du Groupe</h2>
+                <div class="alert alert-info">
+                    Classez exactement <strong>5 sujets distincts</strong> par ordre de préférence (du 1er au 5ème).
+                </div>
+                <form id="preferences-form" class="card">
+                    <div class="pref-row"><label>Choix 1 (Préféré) :</label><select id="pref-1" required></select></div>
+                    <div class="pref-row"><label>Choix 2 :</label><select id="pref-2" required></select></div>
+                    <div class="pref-row"><label>Choix 3 :</label><select id="pref-3" required></select></div>
+                    <div class="pref-row"><label>Choix 4 :</label><select id="pref-4" required></select></div>
+                    <div class="pref-row"><label>Choix 5 :</label><select id="pref-5" required></select></div>
+                    <button type="submit">Enregistrer les préférences</button>
+                </form>
+            </div>
+
+            <!-- ---------------------------------------------------- -->
+            <!-- VUES ADMINISTRATEUR                                  -->
+            <!-- ---------------------------------------------------- -->
+            <!-- Gestion des Enseignants (US2) -->
+            <div id="view-admin-teachers" class="tab-pane hidden">
+                <h2>Gestion des Enseignants</h2>
+                <div class="grid-2">
+                    <form id="create-teacher-form" class="card">
+                        <h3>Créer un Enseignant</h3>
+                        <label for="teacher-login">Login :</label>
+                        <input type="text" id="teacher-login" required placeholder="ex: turing">
+
+                        <label for="teacher-password">Mot de passe :</label>
+                        <input type="password" id="teacher-password" required placeholder="••••••••">
+
+                        <div class="form-row">
+                            <div><label for="teacher-firstname">Prénom :</label><input type="text" id="teacher-firstname" placeholder="Alan"></div>
+                            <div><label for="teacher-lastname">Nom :</label><input type="text" id="teacher-lastname" placeholder="Turing"></div>
+                        </div>
+                        <button type="submit">Créer l'enseignant</button>
+                    </form>
+                    <div class="card">
+                        <h3>Enseignants enregistrés</h3>
+                        <ul id="admin-teachers-list" class="simple-list"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestion des Étudiants (US3) -->
+            <div id="view-admin-students" class="tab-pane hidden">
+                <h2>Gestion des Étudiants</h2>
+                <div class="grid-2">
+                    <form id="create-student-form" class="card">
+                        <h3>Créer un Étudiant</h3>
+                        <label for="student-login">Login :</label>
+                        <input type="text" id="student-login" required placeholder="ex: jdupont">
+
+                        <label for="student-password">Mot de passe :</label>
+                        <input type="password" id="student-password" required placeholder="••••••••">
+
+                        <div class="form-row">
+                            <div><label for="student-firstname">Prénom :</label><input type="text" id="student-firstname" placeholder="Jean"></div>
+                            <div><label for="student-lastname">Nom :</label><input type="text" id="student-lastname" placeholder="Dupont"></div>
+                        </div>
+                        <button type="submit">Créer l'étudiant</button>
+                    </form>
+                    <div class="card">
+                        <h3>Étudiants enregistrés</h3>
+                        <ul id="admin-students-list" class="simple-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal d'édition de sujet (US8) -->
+    <div id="edit-subject-modal" class="modal hidden">
+        <div class="modal-box">
+            <h3>Modifier le Sujet</h3>
+            <form id="edit-subject-form">
+                <input type="hidden" id="edit-subject-id">
+                <label for="edit-subject-title">Titre :</label>
+                <input type="text" id="edit-subject-title" required>
+
+                <label for="edit-subject-desc">Description :</label>
+                <textarea id="edit-subject-desc" rows="4" required></textarea>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-outline" onclick="closeEditModal()">Annuler</button>
+                    <button type="submit">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

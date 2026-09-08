@@ -1,0 +1,93 @@
+/* ======================================================== */
+/* STYLE CSS MINIMALISTE ET LISIBLE POUR LE PROJET AGL      */
+/* ======================================================== */
+
+:root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+.container { max-width: 1000px; margin: 1.5rem auto; padding: 0 1rem; }
+.hidden { display: none !important; }
+
+/* En-tête */
+.app-header { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 0.75rem 1.5rem; }
+.header-content { max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.app-header h1 { font-size: 1.15rem; }
+
+/* Éléments de formulaire par défaut */
+label { display: block; font-weight: 600; font-size: 0.85rem; margin: 0.75rem 0 0.25rem; }
+input, select, textarea {
+    width: 100%; padding: 0.55rem 0.75rem; font-size: 0.9rem; font-family: inherit;
+    border: 1px solid var(--border); border-radius: 6px; background: #fff;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+
+/* Boutons */
+button, .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0.55rem 1rem; font-size: 0.9rem; font-weight: 600;
+    border-radius: 6px; border: 1px solid var(--primary);
+    background: var(--primary); color: #fff; cursor: pointer; margin-top: 0.75rem;
+}
+button:hover { background: var(--primary-hover); }
+.btn-outline { background: transparent; color: var(--text); border-color: var(--border); }
+.btn-outline:hover { background: #f1f5f9; }
+.btn-sm { padding: 0.3rem 0.6rem; font-size: 0.8rem; margin: 0; }
+.btn-danger { background: #ef4444; border-color: #ef4444; color: #fff; }
+.btn-danger:hover { background: #dc2626; }
+
+/* Cartes et conteneurs */
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+.card-center { max-width: 400px; margin: 3rem auto; }
+.pane-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.text-muted { color: var(--muted); font-size: 0.85rem; }
+
+/* Grilles */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+@media (max-width: 650px) { .grid-2, .form-row { grid-template-columns: 1fr; } }
+
+/* Onglets */
+.tabs-nav { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; padding-bottom: 0.5rem; }
+.tab-btn { background: transparent; border: none; color: var(--muted); margin: 0; padding: 0.5rem 0.8rem; border-radius: 6px; }
+.tab-btn.active { background: #e0e7ff; color: var(--primary); }
+
+/* Listes et Items */
+.simple-list { list-style: none; margin-top: 0.5rem; }
+.simple-list li { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+.simple-list li:last-child { border-bottom: none; }
+.group-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem; background: #f8fafc; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.5rem; }
+.group-section { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+/* Badges & Alertes */
+.badge { background: #e0e7ff; color: var(--primary); font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; }
+.alert { padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.9rem; }
+.alert-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+
+/* Préférences et Chips */
+.pref-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.pref-row label { width: 140px; margin: 0; }
+.pref-row select { flex: 1; }
+.quick-logins { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem; }
+.chip { background: #eef2ff; border: none; color: var(--primary); font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 4px; margin: 0; }
+.hint {
+    font-size: 0.875rem;
+    color: #6b7280; /* gray-500 */
+    margin-top: 0.25rem;
+    line-height: 1.4;
+}
+
+/* Modal */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal-box { background: #fff; padding: 1.5rem; border-radius: 8px; width: 90%; max-width: 450px; }
+.modal-buttons { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
