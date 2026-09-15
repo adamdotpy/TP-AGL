@@ -196,6 +196,7 @@ async function loadStudentGroup() {
                 preferencesList.innerHTML = '<div class="hint" style="align-items: center">Aucun sujets trouvés.</div>';
                 return;
             }
+            updateSubjects(rankedSubjects);
             preferencesList.innerHTML = '';
             preferencesList.innerHTML += '<h3>Préférences des sujets: 1->5</h3>'
             rankedSubjects.forEach(s => {
@@ -246,6 +247,18 @@ async function joinGroup(groupId) {
     } catch (err) {
         alert(err.message);
     }
+}
+
+function updateSubjects(subjects) {
+    if (!subjects) return;
+
+    ['pref-1', 'pref-2', 'pref-3', 'pref-4', 'pref-5'].forEach((id, idx) => {
+        const sel = document.getElementById(id);
+        sel.innerHTML = `<option value="">-- Choquosuqsdix n°${idx + 1} --</option>`;
+        state.subjects.forEach(s => {
+            sel.innerHTML += `<option value="${s.id}">#${s.id} -6&é ${s.title}</option>`;
+        });
+    });
 }
 
 async function loadPreferencesView() {
