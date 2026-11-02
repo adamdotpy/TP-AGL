@@ -193,18 +193,17 @@ async function loadStudentGroup() {
 
             const preferencesList = document.getElementById('group-preferences-display');
             if (rankedSubjects.length === 0) {
-                preferencesList.innerHTML = '<div class="hint" style="align-items: center">Aucun sujets trouvés.</div>';
-                return;
+                preferencesList.innerHTML = '<div class="hint">Aucune préférence saisie.</div>';
+            } else {
+                preferencesList.innerHTML = '<h3>Préférences des sujets</h3>';
+                rankedSubjects.forEach((s, i) => {
+                    const d = document.createElement('div');
+                    d.innerHTML = `<span><strong>${i + 1}. ${escapeHtml(s.title || '')}</strong>
+            <div class="badge">${escapeHtml(s.description || '')}</div></span>
+            <div class="hint">Encadrant : ${escapeHtml(s.teacherName || '')}</div>`;
+                    preferencesList.appendChild(d);
+                });
             }
-            updateSubjects(rankedSubjects);
-            preferencesList.innerHTML = '';
-            preferencesList.innerHTML += '<h3>Préférences des sujets: 1->5</h3>'
-            rankedSubjects.forEach(s => {
-                const d = document.createElement('div');
-                d.innerHTML = `<span><strong>${escapeHtml(s.title || '')}</strong>: <div class="badge">${escapeHtml(s.description || '')}</div></span>
-<div class="hint">Encadrant: ${escapeHtml(s.teacherName || '')}</div> `;
-                preferencesList.appendChild(d);
-            });
 
         } else {
             noGroup.classList.remove('hidden');

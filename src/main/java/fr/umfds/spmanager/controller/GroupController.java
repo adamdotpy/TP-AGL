@@ -99,6 +99,7 @@ public class GroupController {
     }
 
     public void getGroupDetails(Context ctx) {
+        extractUser(ctx);
         String idStr = ctx.pathParam("id");
         try {
             int groupId = Integer.parseInt(idStr);
