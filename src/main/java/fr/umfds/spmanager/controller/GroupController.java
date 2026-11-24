@@ -93,7 +93,6 @@ public class GroupController {
             ctx.status(200);
             ctx.json(response);
         } catch (NumberFormatException e) {
-            ctx.status(400);
             throw new BadRequestException("Invalid group ID format");
         }
     }

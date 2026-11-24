@@ -123,7 +123,7 @@ async function loadSubjects() {
 
 async function loadMySubjects() {
     try {
-        const mySubjects = state.subjects.filter(s => s.teacherId === state.currentUser.id);
+        const mySubjects = state.subjects.filter(s => s.teacherId === state.currentUser.userId);
         const list = document.getElementById('my-subjects-list');
         list.innerHTML = mySubjects.length === 0 ? '<p class="text-muted">Vous n\'avez pas encore créé de sujet.</p>' : '';
 
@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
             await apiFetch(`/api/subjects/${id}`, { method: 'PUT', body: JSON.stringify({ title, description }) });
             alert('Sujet mis à jour avec succès !');
             closeEditModal();
-            loadSubjects();
+            await loadSubjects();   // on attend la nouvelle liste avant de redessiner "Mes Sujets"
             loadMySubjects();
         } catch (err) {
             alert(err.message);
